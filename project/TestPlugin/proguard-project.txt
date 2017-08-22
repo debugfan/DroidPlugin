@@ -19,7 +19,7 @@
 #   public *;
 #}
 
--libraryjars lib/layoutlib.jar
+#-libraryjars lib/layoutlib.jar
 
 -keepclasseswithmembers public class * {
     public static void main(java.lang.String[]);

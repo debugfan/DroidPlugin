@@ -1,8 +1,9 @@
 apply plugin: 'com.android.library'
 
 dependencies {
-    provided fileTree(dir: 'lib', include: '*.jar')
-    compile fileTree(dir: 'libs', include: '*.jar')
+    //provided fileTree(dir: 'lib', include: '*.jar')
+    compile fileTree(include: '*.jar', dir: 'libs')
+    compile files('lib/layoutlib.jar')
 }
 
 android {
