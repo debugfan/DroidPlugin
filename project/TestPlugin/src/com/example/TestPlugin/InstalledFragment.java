@@ -46,9 +46,27 @@ public class InstalledFragment extends ListFragment implements ServiceConnection
         if (v.getId() == R.id.button2) {
 
             PackageManager pm = getActivity().getPackageManager();
-            Intent intent = pm.getLaunchIntentForPackage(item.packageInfo.packageName);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(intent);
+            String name = item.packageInfo.packageName;
+            Intent intent = null;
+            intent = pm.getLaunchIntentForPackage(name);
+            if(intent != null) {
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+                return;
+            }
+            try {
+                PackageInfo pi = pm.getPackageInfo(name, pm.GET_SERVICES);
+                for(int i = 0; i < pi.services.length; i++) {
+                    if (pi.services[i] != null && pi.services[i].exported != false) {
+                        intent = new Intent();
+                        intent.setComponent(new ComponentName(name, pi.services[i].name));
+                        intent.addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
+                        getContext().startService(intent);
+                    }
+                }
+            } catch (PackageManager.NameNotFoundException e) {
+                e.printStackTrace();
+            }
         } else if (v.getId() == R.id.button3) {
             doUninstall(item);
         }
